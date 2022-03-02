@@ -14,29 +14,39 @@ class UsersRepository implements IUsersRepository {
     if (!UsersRepository.INSTANCE) {
       UsersRepository.INSTANCE = new UsersRepository();
     }
-
     return UsersRepository.INSTANCE;
   }
 
   create({ name, email }: ICreateUserDTO): User {
-    // Complete aqui
-  }
+    const user = new User();
+    user.name = name;
+    user.email = email;
+    user.updated_at = new Date();
 
-  findById(id: string): User | undefined {
-    // Complete aqui
-  }
-
-  findByEmail(email: string): User | undefined {
-    // Complete aqui
-  }
-
-  turnAdmin(receivedUser: User): User {
-    // Complete aqui
+    this.users.push(user);
+    
+    return user;
   }
 
   list(): User[] {
-    // Complete aqui
+    return this.users;
   }
+  
+  findById(id: string): User | undefined {
+    return this.users.find(user => user.id === id);
+  }
+  
+  findByEmail(email: string): User | undefined {
+    return this.users.find(user => user.email === email);
+  }
+  
+  turnAdmin(receivedUser: User): User {
+    const user = this.users.find(user => user.id === receivedUser.id);
+    user.admin = true;
+    user.updated_at = new Date();
+    return user;
+  }
+
 }
 
 export { UsersRepository };
